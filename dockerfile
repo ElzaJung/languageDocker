@@ -1,3 +1,13 @@
-FROM libretranslate/libretranslate:latest
+# Example Dockerfile snippet
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install dependencies and LibreTranslate
+RUN pip install libretranslate
+
+# Expose the default port (adjust if necessary)
 EXPOSE 5000
-CMD ["sh", "-c", "libretranslate --host 0.0.0.0 --port ${PORT:-5000}"]
+
+# Set the default command (with optional args)
+CMD ["libretranslate"]
