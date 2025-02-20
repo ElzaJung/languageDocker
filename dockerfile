@@ -7,8 +7,12 @@ WORKDIR /app
 # Install LibreTranslate
 RUN pip install libretranslate
 
+# Copy the start script
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
 # Expose the correct port
 EXPOSE 5000
 
-# Explicitly bind to port 5000
-CMD ["libretranslate", "--host", "0.0.0.0", "--port", "5000"]
+# Run the script
+CMD ["/start.sh"]
