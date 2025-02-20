@@ -1,7 +1,6 @@
-__pycache__
+.git
+__pycache__/
 *.pyc
 *.pyo
-*.pyd
-env
-venv
-*.egg-info
+node_modules
+.env
