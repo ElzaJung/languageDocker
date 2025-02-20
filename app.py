@@ -13,7 +13,7 @@ def index():
 @app.route('/translate', methods=['POST'])
 def translate():
     data = request.get_json()
-    text = data.get("text", "")
+    text = data.get("text", "").strip()
     source_lang = data.get("source", "en")
     target_lang = data.get("target", "es")
 
