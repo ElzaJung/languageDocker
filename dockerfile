@@ -1,14 +1,14 @@
-# Use a base image instead of LibreTranslate's default
+# Use Python as the base image
 FROM python:3.10
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Install LibreTranslate manually
+# Install LibreTranslate
 RUN pip install libretranslate
 
-# Expose the correct port
+# Expose a dynamic port
 EXPOSE 5000
 
-# Run LibreTranslate on the correct port
-CMD ["libretranslate", "--host", "0.0.0.0", "--port", "5000"]
+# Start LibreTranslate using the dynamic port assigned by Render
+CMD ["sh", "-c", "libretranslate --host 0.0.0.0 --port ${PORT:-5000}"]
