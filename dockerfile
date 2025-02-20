@@ -1,28 +1,31 @@
-# Use the official LibreTranslate image as the base
+# Use LibreTranslate as the base image
 FROM libretranslate/libretranslate:latest
 
 # Switch to root user to install system dependencies
 USER root
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Update package lists and install Python
-RUN apt-get update && apt-get install -y python3 python3-pip
+# Install Python, pip, and cleanup cache
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
-# Copy dependencies and install them as root
-COPY requirements.txt .
-RUN pip3 install --no-cache-dir --root-user-action=ignore -r requirements.txt
+# Set writable directory for Argos Translate
+ENV ARGOS_TRANSLATE_DATA_DIR=/tmp/argos_data
 
-# Switch back to a non-root user for security
+# Switch back to non-root user
 USER 1000
+
+# Copy dependencies and install them
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy application files
 COPY . .
 
-# Expose ports (5000 for LibreTranslate, 8080 for Flask API)
-EXPOSE 5000
-EXPOSE 8080
+# Expose ports
+EXPOSE 5001 5000
 
-# Start LibreTranslate on port 5000, then Flask on port 8080
-CMD libretranslate --host 0.0.0.0 --port 5000 & gunicorn -b 0.0.0.0:8080 app:app
+# Start LibreTranslate on port 5001, then start Flask on port 5000
+CMD libretranslate --host 0.0.0.0 --port 5001 & gunicorn -b 0.0.0.0:5000 app:app
