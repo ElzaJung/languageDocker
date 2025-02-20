@@ -1,7 +1,7 @@
 # Use the official LibreTranslate image as the base
 FROM libretranslate/libretranslate:latest
 
-# Switch to root user to install Python
+# Switch to root user to install system dependencies
 USER root
 
 # Set the working directory
@@ -10,12 +10,12 @@ WORKDIR /app
 # Update package lists and install Python
 RUN apt-get update && apt-get install -y python3 python3-pip
 
+# Copy dependencies and install them as root
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir --root-user-action=ignore -r requirements.txt
+
 # Switch back to a non-root user for security
 USER 1000
-
-# Copy dependencies and install them
-COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy application files
 COPY . .
