@@ -1,18 +1,15 @@
-FROM python:3.8-slim
+# Use Python as the base image
+FROM python:3.10
 
-# Install system dependencies for building Python packages
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libffi-dev \
-    && rm -rf /var/lib/apt/lists/*
-
+# Set the working directory
 WORKDIR /app
-COPY . /app
 
-# Upgrade pip to ensure compatibility
-RUN pip install --upgrade pip
+# Install LibreTranslate
+RUN pip install libretranslate
 
-# Install LibreTranslate in editable mode
-RUN pip install -e .
+# Expose the default port for LibreTranslate
+ENV PORT=5000
+EXPOSE 5000
 
-CMD ["libretranslate", "--host", "0.0.0.0", "--port", "5000"]
+# Start LibreTranslate and ensure it listens on all interfaces
+CMD ["sh", "-c", "libretranslate --host 0.0.0.0 --port $PORT"]
