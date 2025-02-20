@@ -1,11 +1,15 @@
+import os
+
+# Set a writable directory for argostranslate
+os.environ["ARGOS_TRANSLATE_DATA_DIR"] = "/tmp/argos_data"
+
 from flask import Flask, request, jsonify
 import requests
-import os
 
 app = Flask(__name__)
 
-# LibreTranslate API URL (inside the same container)
-LIBRETRANSLATE_URL = "http://localhost:5000/translate"
+# LibreTranslate API URL
+LIBRETRANSLATE_URL = "http://localhost:5001/translate"
 
 @app.route('/')
 def index():
@@ -37,5 +41,5 @@ def translate():
     return jsonify({"translated_text": translated_text})
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8080))  # Flask should run on 8080
+    port = int(os.environ.get("PORT", 5000))  # Render requires Flask to run on 5000
     app.run(host='0.0.0.0', port=port)
