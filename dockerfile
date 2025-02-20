@@ -9,4 +9,4 @@ ENV LT_PORT=5000
 EXPOSE 5000
 
 # Optionally, override the entrypoint or command
-CMD ["libretranslate", "--host", "0.0.0.0"]
+ENTRYPOINT ["./venv/bin/libretranslate", "--host", "0.0.0.0"]
