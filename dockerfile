@@ -7,8 +7,8 @@ WORKDIR /app
 # Install LibreTranslate
 RUN pip install libretranslate
 
-# Expose a dynamic port
+# Expose the default Render-assigned port
 EXPOSE 5000
 
-# Start LibreTranslate using the dynamic port assigned by Render
-CMD ["sh", "-c", "libretranslate --host 0.0.0.0 --port ${PORT:-5000}"]
+# Ensure LibreTranslate binds to the correct port
+ENTRYPOINT ["sh", "-c", "libretranslate --host 0.0.0.0 --port ${PORT:-5000}"]
