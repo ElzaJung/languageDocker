@@ -1,10 +1,7 @@
-FROM libretranslate/libretranslate
-
-# Copy your startup script into the container
-COPY startup.sh /app/startup.sh
-
-# Make sure the script is executable
-RUN chmod +x /app/startup.sh
-
-# Use the startup script as the container's entrypoint
-CMD ["/app/startup.sh"]
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+COPY . . 
+EXPOSE 5000
+CMD ["python", "app.py"]
