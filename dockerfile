@@ -11,18 +11,17 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
-# Set a writable directory for Argos Translate
-ENV ARGOS_TRANSLATE_DATA_DIR=/tmp/argos_data
+# Set environment variables to avoid permission issues
+ENV PIP_NO_CACHE_DIR=off \
+    PIP_BREAK_SYSTEM_PACKAGES=1 \
+    PIP_ROOT_USER_ACTION=ignore
 
-# Ensure the directory exists and is writable
-RUN mkdir -p /tmp/argos_data && chmod -R 777 /tmp/argos_data
-
-# Switch back to non-root user
-USER 1000
-
-# Copy dependencies and install them
+# Copy dependencies and install them as root
 COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir --break-system-packages --user -r requirements.txt
+
+# Switch back to non-root user (important for security)
+USER 1000
 
 # Copy application files
 COPY . .
