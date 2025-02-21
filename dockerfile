@@ -7,11 +7,16 @@ USER root
 # (otherwise Docker tries to run "libretranslate" + your script)
 ENTRYPOINT []
 
-# Copy your script into the container
+# Copy script into the container
 COPY start.sh /start.sh
 
-# Make your startup script executable
+# Debug: Check that the file actually copied
+RUN echo "Contents of /start.sh:" && cat /start.sh
+
 RUN chmod +x /start.sh
+
+# Debug: Check permissions after chmod
+RUN echo "Permissions of /start.sh:" && ls -l /start.sh
 
 # Switch back to the non-root user (for best security practices)
 # The default non-root user in the LibreTranslate image is "translator"
