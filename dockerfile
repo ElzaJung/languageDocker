@@ -1,17 +1,21 @@
-FROM libretranslate/libretranslate
+FROM libretranslate/libretranslate:latest
 
-# If you want a default port (Render will override it, but it's a good fallback)
-ARG PORT=5000
-ENV PORT=${PORT}
+# Switch to root so we can set file permissions
+USER root
 
-# Expose the port
-EXPOSE ${PORT}
-
-# Override the base image's entrypoint
+# Remove the base image's ENTRYPOINT 
+# (otherwise Docker tries to run "libretranslate" + your script)
 ENTRYPOINT []
 
-# Copy and use your startup script
+# Copy your script into the container
 COPY start.sh /start.sh
+
+# Make your startup script executable
 RUN chmod +x /start.sh
 
+# Switch back to the non-root user (for best security practices)
+# The default non-root user in the LibreTranslate image is "translator"
+USER translator
+
+# Finally, specify your custom CMD
 CMD ["/start.sh"]
