@@ -5,4 +5,4 @@ ENV PORT=${PORT}
 
 EXPOSE ${PORT}
 
-CMD ["sh", "-c", "./venv/bin/libretranslate --port $$PORT"]
+CMD sh -c "./venv/bin/libretranslate --port $PORT"
